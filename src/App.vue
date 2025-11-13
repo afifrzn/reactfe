@@ -1,30 +1,57 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="container">
+    <h2>Login Rust Demo (Vue)</h2>
+
+    <form @submit.prevent="handleLogin">
+      <input v-model="username" type="text" placeholder="Username" required />
+      <input v-model="password" type="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+
+    <p :style="{ color: messageColor }">{{ message }}</p>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<script setup>
+import { ref } from "vue";
+
+const username = ref("");
+const password = ref("");
+const message = ref("");
+const messageColor = ref("");
+
+const handleLogin = async () => {
+  try {
+    const res = await fetch("http://rustbe:3000/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: username.value, password: password.value }),
+    });
+
+    const data = await res.json();
+    message.value = data.message;
+    messageColor.value = data.success ? "green" : "red";
+  } catch (err) {
+    message.value = "Gagal terhubung ke server!";
+    messageColor.value = "gray";
+  }
+};
+</script>
+
+<style>
+.container {
+  max-width: 400px;
+  margin: 50px auto;
+  text-align: center;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+button {
+  padding: 10px 20px;
+  cursor: pointer;
 }
 </style>
