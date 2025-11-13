@@ -22,16 +22,20 @@ const messageColor = ref("");
 
 const handleLogin = async () => {
   try {
-    const res = await fetch("http://rustbe:3000/login", {
+    const res = await fetch("http://10.10.100.77:3000/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: username.value, password: password.value }),
+      body: JSON.stringify({
+        username: username.value,
+        password: password.value,
+      }),
     });
 
     const data = await res.json();
-    message.value = data.message;
+    message.value = data.message || "Login berhasil!";
     messageColor.value = data.success ? "green" : "red";
   } catch (err) {
+    console.error(err);
     message.value = "Gagal terhubung ke server!";
     messageColor.value = "gray";
   }
