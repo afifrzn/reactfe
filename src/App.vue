@@ -27,7 +27,7 @@ const messageColor = ref("");
  */
 const handleLogin = async () => {
   try {
-    const res = await fetch("http://rustapp:8080/users", {
+    const res = await fetch("http://10.10.100.77:8080/users", {
       method: "POST", // <-- POST ke endpoint login
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
