@@ -20,10 +20,15 @@ const password = ref("");
 const message = ref("");
 const messageColor = ref("");
 
+/**
+ * HANDLE POST /LOGIN
+ * - Mengirim username + password ke server Rust
+ * - Menerima respons JSON apakah login berhasil / gagal
+ */
 const handleLogin = async () => {
   try {
-    const res = await fetch("http://10.10.100.77:3000/login", {
-      method: "POST",
+    const res = await fetch("http://rustapp:8080/login", {
+      method: "POST", // <-- POST ke endpoint login
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: username.value,
@@ -32,6 +37,7 @@ const handleLogin = async () => {
     });
 
     const data = await res.json();
+
     message.value = data.message || "Login berhasil!";
     messageColor.value = data.success ? "green" : "red";
   } catch (err) {
